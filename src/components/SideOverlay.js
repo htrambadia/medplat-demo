@@ -27,12 +27,6 @@ export default function SideOverlay({ title, FormBody }) {
         >
           <div className="overlay-header">{title.toUpperCase()}</div>
           <div className="overlay-body">{FormBody && <FormBody />}</div>
-          <div className="overlay-footer">
-            <Button className="button close" onClick={handleOverlayState}>
-              Close
-            </Button>
-            <Button className="button search">Search</Button>
-          </div>
         </Drawer>
       )}
     </div>

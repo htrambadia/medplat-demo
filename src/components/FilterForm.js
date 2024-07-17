@@ -1,92 +1,83 @@
-import React, { useState } from "react";
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import React from "react";
+import { useFormik } from "formik";
+import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
 
-export default function FilterForm({ title, toggleOverlay }) {
-  const initalState = {
-    MenuType: "None",
-    GroupType: "None",
-    SubGroupType: "None",
-  };
-  const [state, setState] = useState(initalState);
-
+export default function FilterForm({ toggleOverlay }) {
   const menuTypes = ["admin", "fhs", "ncd", "training", "manage", "report"];
   const groupTypes = ["group1", "group2"];
   const subGroupTypes = ["sg1", "sg2"];
 
-  const handleMenuType = (e) => {
-    setState({
-      ...state,
-      MenuType: e.target.value,
-    });
-  };
-  const handleGroupType = (e) => {
-    setState({
-      ...state,
-      GroupType: e.target.value,
-    });
-  };
-  const handleSubGroupType = (e) => {
-    setState({
-      ...state,
-      SubGroupType: e.target.value,
-    });
-  };
+  const formik = useFormik({
+    initialValues: {
+      MenuType: "None",
+      GroupType: "None",
+      SubGroupType: "None",
+    },
+    onSubmit: (values) => {
+      console.log("Form values:", values);
+      toggleOverlay(false);
+    },
+  });
 
   return (
-      <div className="filter-form">
-        <FormControl margin="normal" fullWidth>
-          <InputLabel id="MenuType">Menu Type</InputLabel>
-          <Select
-            labelId="MenuType"
-            id="menuType"
-            value={state.MenuType}
-            label="menu"
-            onChange={(e) => handleMenuType(e)}
-            variant="standard"
-          >
-            {menuTypes.map((type) => (
-              <MenuItem value={type} className="select-item">
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl margin="normal" fullWidth>
-          <InputLabel id="Group">Group Type</InputLabel>
-          <Select
-            labelId="Group"
-            id="groupType"
-            value={state.GroupType}
-            label="group"
-            onChange={(e) => handleGroupType(e)}
-            variant="standard"
-          >
-            {groupTypes.map((type) => (
-              <MenuItem value={type} className="select-item">
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl margin="normal" fullWidth>
-          <InputLabel id="Group" size="normal">
-            Sub Group Type
-          </InputLabel>
-          <Select
-            labelId="SubGroup"
-            id="subGroupType"
-            value={state.SubGroupType}
-            label="subGroup"
-            onChange={(e) => handleSubGroupType(e)}
-            variant="standard"
-          >
-            {subGroupTypes.map((type) => (
-              <MenuItem value={type} className="select-item">
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+    <form onSubmit={formik.handleSubmit} className="filter-form">
+      <FormControl margin="normal" fullWidth>
+        <InputLabel id="MenuType">Menu Type</InputLabel>
+        <Select
+          labelId="MenuType"
+          id="menuType"
+          name="MenuType"
+          value={formik.values.MenuType}
+          onChange={formik.handleChange}
+          variant="standard"
+        >
+          {menuTypes.map((type) => (
+            <MenuItem key={type} value={type} className="select-item">
+              {type}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl margin="normal" fullWidth>
+        <InputLabel id="Group">Group Type</InputLabel>
+        <Select
+          labelId="Group"
+          id="groupType"
+          name="GroupType"
+          value={formik.values.GroupType}
+          onChange={formik.handleChange}
+          variant="standard"
+        >
+          {groupTypes.map((type) => (
+            <MenuItem key={type} value={type} className="select-item">
+              {type}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl margin="normal" fullWidth>
+        <InputLabel id="SubGroup">Sub Group Type</InputLabel>
+        <Select
+          labelId="SubGroup"
+          id="subGroupType"
+          name="SubGroupType"
+          value={formik.values.SubGroupType}
+          onChange={formik.handleChange}
+          variant="standard"
+        >
+          {subGroupTypes.map((type) => (
+            <MenuItem key={type} value={type} className="select-item">
+              {type}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <div className="overlay-footer">
+            <Button className="button close">
+              Close
+            </Button>
+            <Button type="submit" className="button search" >Search</Button>
+          </div>
+    </form>
   );
 }
